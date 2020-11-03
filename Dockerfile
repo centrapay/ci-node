@@ -1,4 +1,4 @@
-FROM node:12 as docker-compose
+FROM node:14 as docker-compose
 ENV VERSION=1.25.5
 RUN curl -L -o /usr/local/bin/docker-compose \
     "https://github.com/docker/compose/releases/download/$VERSION/docker-compose-Linux-x86_64"
@@ -7,7 +7,7 @@ RUN sha256sum -c /usr/local/bin/docker-compose.sha256
 RUN chmod +x /usr/local/bin/docker-compose
 
 # https://docs.docker.com/install/linux/docker-ce/debian/
-FROM node:12 as docker
+FROM node:14 as docker
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -22,7 +22,7 @@ RUN add-apt-repository \
    stable"
 RUN apt-get update && apt-get install -y docker-ce-cli
 
-FROM node:12
+FROM node:14
 COPY --from=docker /usr/bin/docker /usr/bin/docker
 COPY --from=docker-compose /usr/local/bin/docker-compose /usr/local/bin/docker-compose
 
