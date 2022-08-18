@@ -1,0 +1,21 @@
+on:
+  push:
+    tags:
+      - 1.*
+      - 2.*
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: '
+        echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        '
+      - run: echo "image_tag_latest=centrapay/ci-node:latest" >> $GITHUB_ENV
+      - run: echo "image_tag_versioned=centrapay/ci-node:${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - run: docker build -t "${image_tag_versioned}" .
+      - run: docker tag "${image_tag_versioned}" "${image_tag_latest}"
+      - run: docker push "${image_tag_versioned}"
+      - run: docker push "${image_tag_latest}"
