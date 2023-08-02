@@ -1,5 +1,5 @@
 FROM node:18 as docker-compose
-ENV VERSION=1.25.5
+ENV VERSION=1.29.0
 RUN curl -L -o /usr/local/bin/docker-compose \
     "https://github.com/docker/compose/releases/download/$VERSION/docker-compose-Linux-x86_64"
 COPY docker-compose.sha256 /usr/local/bin/docker-compose.sha256
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     software-properties-common
 RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list >/dev/null
 # RUN apt update -y
 # COPY docker-public-key.asc /
 # RUN apt-key add /docker-public-key.asc
